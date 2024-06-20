@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import fetchStudents from '../api/StudentList';
+import deleteStudent from '../api/DeleteStudent';
 
-const StudentList = ({ deleteStudent }) => {
+const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -26,7 +27,6 @@ const StudentList = ({ deleteStudent }) => {
         setPage(currentPage);
       } catch (error) {
         console.error('Error fetching students:', error);
-        // Handle error state or set default values
       }
     };
   
@@ -47,6 +47,15 @@ const StudentList = ({ deleteStudent }) => {
     setSearchParams({ q: searchQuery, page: newPage });
   };
 
+  const handleDeleteStudent = async (id) => {
+    try{
+      await deleteStudent(id);
+      setStudents(students.filter(student => student._id !== id));
+    }catch(error){
+      console.error('Error deleting student:', error);
+    }
+  };
+
   return (
     <div className="student-list-container">
       <h2>Student List</h2>
@@ -59,7 +68,7 @@ const StudentList = ({ deleteStudent }) => {
         />
         <button type="submit">Search</button>
       </form>
-      <button onClick={handleCreateClick}>Create</button>
+      <button className="create-btn" onClick={handleCreateClick}>Create</button>
         <table className="student-table">
             <thead>
               <tr>
@@ -79,7 +88,7 @@ const StudentList = ({ deleteStudent }) => {
                     <td>{student.email}</td>
                     <td>{student.created_at}</td>
                     <td>
-                      <button className="delete-btn" onClick={() => deleteStudent(student.id)}>
+                      <button className="delete-btn" onClick={() => handleDeleteStudent(student._id)}>
                         Delete
                       </button>
                     </td>

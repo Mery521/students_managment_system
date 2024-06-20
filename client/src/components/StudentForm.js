@@ -49,7 +49,7 @@ const StudentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
     try {
       await createStudent({
         firstname,
@@ -60,7 +60,6 @@ const StudentForm = () => {
         country: selectedCountry,
         city: selectedCity,
       });
-      // Reset form fields upon successful submission
       setFirstname('');
       setLastname('');
       setEmail('');
@@ -71,7 +70,7 @@ const StudentForm = () => {
 
       navigate('/');
     } catch (err) {
-      setError(err.message || 'Error creating student'); // Set error message from backend
+      setError(err.message || 'Error creating student');
     }
   };
 
@@ -131,7 +130,7 @@ const StudentForm = () => {
         ))}
       </select>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <button type="submit">Create Student</button>
     </form>
