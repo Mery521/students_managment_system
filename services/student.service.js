@@ -16,6 +16,13 @@ async function getStudents(query, page = 1, limit = 10) {
 
 async function createStudent(studentData) {
   try {
+    const { email }= studentData.ema;
+
+    const existingStudent = await Student.findOne({ email });
+    if (existingStudent) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
+
     const student = new Student(studentData);
     await student.save();
     return student;
